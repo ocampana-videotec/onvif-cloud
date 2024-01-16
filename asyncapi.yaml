@@ -1,41 +1,70 @@
 asyncapi: 3.0.0
 info:
-  title: Streetlights App
-  version: '1.0.0'
+  title: ONVIF Cloud Service Specifications
+  version: '0.0.1'
   description: |
-    The Smartylighting Streetlights application allows you
-    to remotely manage the city lights.
-  license:
-    name: Apache 2.0
-    url: 'https://www.apache.org/licenses/LICENSE-2.0'
+    Copyright (c) 2024 by ONVIF: Open Network Video Interface Forum. All
+    rights reserved.
+
+    Recipients  of  this  document  may copy,  distribute,  publish,  or
+    display this document so long  as this copyright notice, license and
+    disclaimer are retained with all  copies of the document. No license
+    is granted to modify this document.
+
+    THIS  DOCUMENT IS  PROVIDED  "AS  IS" AND  THE  CORPORATION AND  ITS
+    MEMBERS AND THEIR AFFILIATES, MAKE NO REPRESENTATIONS OR WARRANTIES,
+    EXPRESS  OR IMPLIED,  INCLUDING BUT  NOT LIMITED  TO, WARRANTIES  OF
+    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT,
+    OR TITLE;  THAT THE CONTENTS OF  THIS DOCUMENT ARE SUITABLE  FOR ANY
+    PURPOSE;  OR  THAT THE  IMPLEMENTATION  OF  SUCH CONTENTS  WILL  NOT
+    INFRINGE ANY PATENTS, COPYRIGHTS, TRADEMARKS  OR OTHER RIGHTS. IN NO
+    EVENT WILL  THE CORPORATION  OR ITS MEMBERS  OR THEIR  AFFILIATES BE
+    LIABLE FOR  ANY DIRECT,  INDIRECT, SPECIAL, INCIDENTAL,  PUNITIVE OR
+    CONSEQUENTIAL  DAMAGES, ARISING  OUT OF  OR RELATING  TO ANY  USE OR
+    DISTRIBUTION OF THIS  DOCUMENT, WHETHER OR NOT  (1) THE CORPORATION,
+    MEMBERS OR THEIR AFFILIATES HAVE  BEEN ADVISED OF THE POSSIBILITY OF
+    SUCH DAMAGES, OR  (2) SUCH DAMAGES WERE  REASONABLY FORESEEABLE, AND
+    ARISING  OUT OF  OR  RELATING TO  ANY USE  OR  DISTRIBUTION OF  THIS
+    DOCUMENT. THE  FOREGOING DISCLAIMER  AND LIMITATION ON  LIABILITY DO
+    NOT APPLY  TO, INVALIDATE,  OR LIMIT REPRESENTATIONS  AND WARRANTIES
+    MADE  BY  THE  MEMBERS  AND   THEIR  RESPECTIVE  AFFILIATES  TO  THE
+    CORPORATION AND  OTHER MEMBERS  IN CERTAIN  WRITTEN POLICIES  OF THE
+    CORPORATION.
+
 servers:
   mosquitto:
     host: test.mosquitto.org
     protocol: mqtt
 channels:
-  lightMeasured:
-    address: 'light/measured'
+  startDeviceSharing:
+    address: 'start/device/sharing'
     messages:
-      lightMeasuredMessage:
-        name: LightMeasured
+      startDeviceSharingMessage:
+        name: StartDeviceSharing
         payload:
           type: object
           properties:
-            id:
-              type: integer
-              minimum: 0
-              description: Id of the streetlight.
-            lumens:
-              type: integer
-              minimum: 0
-              description: Light intensity measured in lumens.
-            sentAt:
+            shareToken:
               type: string
-              format: date-time
-              description: Date and time when the message was sent.
+              description: The share token, to prove permission to share the device.
+            JWTCertificate:
+              type: string
+              description: The certificate holding the public ECC key used to validate JWTs.
+            JWTTrustAnchor:
+              type: string
+              description: The certificate with the public key used to validate the TLS certificate of the OIDC server.
+            JWTConfiguration:
+              type: string
+              description: Configuration of JWT authentication.
+            UplinkTrustAnchor:
+              type: string
+              description: The certificate with the public key used to validate the TLS certificate of the uplink server.
+            UplinkConfiguration:
+              type: string
+              description: Configuration of the uplink service.
 operations:
-  onLightMeasured:
+  onStartDeviceSharing:
     action: 'receive'
-    summary: Information about environmental lighting conditions for a particular streetlight.
+    summary: This operation triggers sharing a device to a new Operational Cloud Service.
     channel:
-      $ref: '#/channels/lightMeasured'
+      $ref: '#/channels/startDeviceSharing'

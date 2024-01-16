@@ -1,5 +1,3 @@
-This is a [Glee](https://github.com/asyncapi/glee) project bootstrapped with the [AsyncAPI CLI](https://github.com/asyncapi/cli).
-
 ## Getting Started
 
 First, run the development server:
@@ -9,10 +7,8 @@ npm install
 npm run dev
 ```
 
-You can start editing the API by modifying `functions/onLightMeasured.js` and `asyncapi.yaml`. The server auto-updates as you edit the file.
+Onvce the server is operational, you can trigger a device sharing procedure with the following command
 
-## Learn More
-
-To learn more about Glee features and API, take a look at the [documentation](https://github.com/asyncapi/glee/tree/master/docs).
-
-You can check out [the Glee Github repository](https://github.com/asyncapi/glee/) - your feedback and contributions are welcome!
+```bash
+mqtt pub -t 'start/device/sharing' -h 'test.mosquitto.org' -m '{"shareToken": "1", "JWTCertificate": "2", "JWTTrustAnchor": "3", "JWTConfiguration": "4", "UplinkTrustAnchor": "5", "UplinkConfiguration": "6"}'
+```
