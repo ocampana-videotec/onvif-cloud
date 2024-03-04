@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../../ver20/util/onvif-wsdl-viewer.xsl"?>
+<!--
+Note that the location of the document has been changed to reflect the namespace. 
+Copyright (c) 2008-2024 by ONVIF: Open Network Video Interface Forum. All rights reserved.
+
+Recipients of this document may copy, distribute, publish, or display this document so long as this copyright notice, license and disclaimer are retained with all copies of the document. No license is granted to modify this document.
+
+THIS DOCUMENT IS PROVIDED "AS IS," AND THE CORPORATION AND ITS MEMBERS AND THEIR AFFILIATES, MAKE NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO, WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, OR TITLE; THAT THE CONTENTS OF THIS DOCUMENT ARE SUITABLE FOR ANY PURPOSE; OR THAT THE IMPLEMENTATION OF SUCH CONTENTS WILL NOT INFRINGE ANY PATENTS, COPYRIGHTS, TRADEMARKS OR OTHER RIGHTS.
+IN NO EVENT WILL THE CORPORATION OR ITS MEMBERS OR THEIR AFFILIATES BE LIABLE FOR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL, PUNITIVE OR CONSEQUENTIAL DAMAGES, ARISING OUT OF OR RELATING TO ANY USE OR DISTRIBUTION OF THIS DOCUMENT, WHETHER OR NOT (1) THE CORPORATION, MEMBERS OR THEIR AFFILIATES HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR (2) SUCH DAMAGES WERE REASONABLY FORESEEABLE, AND ARISING OUT OF OR RELATING TO ANY USE OR DISTRIBUTION OF THIS DOCUMENT.  THE FOREGOING DISCLAIMER AND LIMITATION ON LIABILITY DO NOT APPLY TO, INVALIDATE, OR LIMIT REPRESENTATIONS AND WARRANTIES MADE BY THE MEMBERS AND THEIR RESPECTIVE AFFILIATES TO THE CORPORATION AND OTHER MEMBERS IN CERTAIN WRITTEN POLICIES OF THE CORPORATION.
+-->
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsa="http://www.w3.org/2005/08/addressing" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" xmlns:wstop="http://docs.oasis-open.org/wsn/t-1" xmlns:wsntw="http://docs.oasis-open.org/wsn/bw-2" xmlns:tcl="http://www.onvif.org/ver10/cloud/wsdl" xmlns:tas="http://www.onvif.org/ver10/advancedsecurity/wsdl" xmlns:tup="http://www.onvif.org/ver10/uplink/wsdl" xmlns:wsrf-rw="http://docs.oasis-open.org/wsrf/rw-2" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" targetNamespace="http://www.onvif.org/ver10/cloud/wsdl">
+	<wsdl:import namespace="http://docs.oasis-open.org/wsn/bw-2" location="http://docs.oasis-open.org/wsn/bw-2.wsdl"/>
+	<wsdl:import namespace="http://docs.oasis-open.org/wsrf/rw-2" location="http://docs.oasis-open.org/wsrf/rw-2.wsdl"/>
+	<wsdl:types>
+		<xs:schema targetNamespace="http://www.onvif.org/ver10/cloud/wsdl" xmlns:wstop="http://docs.oasis-open.org/wsn/t-1" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" elementFormDefault="qualified" version="24.06">
+			<xs:import namespace="http://www.w3.org/2005/08/addressing" schemaLocation="http://www.w3.org/2005/08/addressing/ws-addr.xsd"/>
+			<xs:import namespace="http://docs.oasis-open.org/wsn/t-1" schemaLocation="http://docs.oasis-open.org/wsn/t-1.xsd"/>
+			<xs:import namespace="http://docs.oasis-open.org/wsn/b-2" schemaLocation="http://docs.oasis-open.org/wsn/b-2.xsd"/>
+			<!--  Message Request/Responses elements  -->
+			<!--===============================-->
+			<xs:element name="GetServiceCapabilities">
+				<xs:complexType>
+					<xs:sequence/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetServiceCapabilitiesResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Capabilities" type="tcl:Capabilities">
+							<xs:annotation>
+								<xs:documentation>The capabilities for the cloud service is returned in the Capabilities element.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+			<xs:complexType name="Capabilities">
+				<xs:sequence>
+					<xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>   <!-- first Vendor then ONVIF -->
+				</xs:sequence>
+				<xs:attribute name="StartDeviceSharing" type="xs:boolean">
+					<xs:annotation>
+						<xs:documentation>Indicates that the StartDeviceSharing is supported.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:anyAttribute processContents="lax"/>
+			</xs:complexType>
+			<xs:element name="Capabilities" type="tcl:Capabilities"/>
+			<!--===============================-->
+			<xs:element name="StartDeviceSharing">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Token" type="xs:string" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>The share token, to prove permission to share the device.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="JWTCertificate" type="wsnt:AbsoluteOrRelativeTimeType" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>The certificate holding the public ECC key used to validate JWTs.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="JWTTrustAnchor" type="tas:Base64DERencodedASN1Value" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>The certificate with the public key used to validate the TLS certificate of the OIDC server.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="JWTConfiguration" type="tas:JWTConfiguration" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Configuration of JWT authentication.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="UplinkTrustAnchor" type="tas:Base64DERencodedASN1Value" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>The certificate with the public key used to validate the TLS certificate of the uplink server.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="UplinkConfiguration" type="tup:Configuration" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Configuration of the uplink service.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="StartDeviceSharingResponse">
+				<xs:complexType>
+					<xs:sequence/>
+				</xs:complexType>
+			</xs:element>
+			<!--===============================-->
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="GetServiceCapabilitiesRequest">
+		<wsdl:part name="parameters" element="tcl:GetServiceCapabilities"/>
+	</wsdl:message>
+	<wsdl:message name="GetServiceCapabilitiesResponse">
+		<wsdl:part name="parameters" element="tcl:GetServiceCapabilitiesResponse"/>
+	</wsdl:message>
+	<wsdl:message name="StartDeviceSharingRequest">
+		<wsdl:part name="parameters" element="tcl:StartDeviceSharing"/>
+	</wsdl:message>
+	<wsdl:message name="StartDeviceSharingResponse">
+		<wsdl:part name="parameters" element="tcl:StartDeviceSharingResponse"/>
+	</wsdl:message>
+	<wsdl:portType name="CloudPortType">
+		<wsdl:operation name="GetServiceCapabilities">
+			<wsdl:documentation>Returns the capabilities of the cloud service. The result is returned in a typed answer.</wsdl:documentation>
+			<wsdl:input message="tcl:GetServiceCapabilitiesRequest" wsaw:Action="http://www.onvif.org/ver10/cloud/wsdl/CloudPortType/GetServiceCapabilitiesRequest"/>
+			<wsdl:output message="tcl:GetServiceCapabilitiesResponse" wsaw:Action="http://www.onvif.org/ver10/cloud/wsdl/CloudPortType/GetServiceCapabilitiesResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="StartDeviceSharing">
+			<wsdl:documentation>This operation triggers sharing a device to a new Operational Cloud Service.</wsdl:documentation>
+			<wsdl:input message="tcl:CreatePullPointSubscriptionRequest" wsaw:Action="http://www.onvif.org/ver10/cloud/wsdl/CloudPortType/CreatePullPointSubscriptionRequest"/>
+			<wsdl:output message="tcl:CreatePullPointSubscriptionResponse" wsaw:Action="http://www.onvif.org/ver10/cloud/wsdl/CloudPortType/CreatePullPointSubscriptionResponse"/>
+			<wsdl:fault name="ResourceUnknownFault" message="wsrf-rw:ResourceUnknownFault"/>
+			<wsdl:fault name="InvalidFilterFault" message="wsntw:InvalidFilterFault"/>
+			<wsdl:fault name="TopicExpressionDialectUnknownFault" message="wsntw:TopicExpressionDialectUnknownFault"/>
+			<wsdl:fault name="InvalidTopicExpressionFault" message="wsntw:InvalidTopicExpressionFault"/>
+			<wsdl:fault name="TopicNotSupportedFault" message="wsntw:TopicNotSupportedFault"/>
+			<wsdl:fault name="InvalidProducerPropertiesExpressionFault" message="wsntw:InvalidProducerPropertiesExpressionFault"/>
+			<wsdl:fault name="InvalidMessageContentExpressionFault" message="wsntw:InvalidMessageContentExpressionFault"/>
+			<wsdl:fault name="UnacceptableInitialTerminationTimeFault" message="wsntw:UnacceptableInitialTerminationTimeFault"/>
+			<wsdl:fault name="UnrecognizedPolicyRequestFault" message="wsntw:UnrecognizedPolicyRequestFault"/>
+			<wsdl:fault name="UnsupportedPolicyRequestFault" message="wsntw:UnsupportedPolicyRequestFault"/>
+			<wsdl:fault name="NotifyMessageNotSupportedFault" message="wsntw:NotifyMessageNotSupportedFault"/>
+			<wsdl:fault name="SubscribeCreationFailedFault" message="wsntw:SubscribeCreationFailedFault"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="CloudBinding" type="tcl:CloudPortType">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="GetServiceCapabilities">
+			<soap:operation soapAction="http://www.onvif.org/ver10/cloud/wsdl/CloudPortType/GetServiceCapabilitiesRequest"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="StartDeviceSharing">
+			<soap:operation soapAction="http://www.onvif.org/ver10/cloud/wsdl/CloudPortType/StartDeviceSharingRequest"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="ResourceUnknownFault">
+				<soap:fault name="ResourceUnknownFault" use="literal"/>
+			</wsdl:fault>
+			<wsdl:fault name="InvalidFilterFault">
+				<soap:fault name="InvalidFilterFault" use="literal"/>
+			</wsdl:fault>
+			<wsdl:fault name="TopicExpressionDialectUnknownFault">
+				<soap:fault name="TopicExpressionDialectUnknownFault" use="literal"/>
+			</wsdl:fault>
+			<wsdl:fault name="InvalidTopicExpressionFault">
+				<soap:fault name="InvalidTopicExpressionFault" use="literal"/>
+			</wsdl:fault>
+			<wsdl:fault name="TopicNotSupportedFault">
+				<soap:fault name="TopicNotSupportedFault" use="literal"/>
+			</wsdl:fault>
+			<wsdl:fault name="InvalidProducerPropertiesExpressionFault">
+				<soap:fault name="InvalidProducerPropertiesExpressionFault" use="literal"/>
+			</wsdl:fault>
+			<wsdl:fault name="InvalidMessageContentExpressionFault">
+				<soap:fault name="InvalidMessageContentExpressionFault" use="literal"/>
+			</wsdl:fault>
+			<wsdl:fault name="UnacceptableInitialTerminationTimeFault">
+				<soap:fault name="UnacceptableInitialTerminationTimeFault" use="literal"/>
+			</wsdl:fault>
+			<wsdl:fault name="UnrecognizedPolicyRequestFault">
+				<soap:fault name="UnrecognizedPolicyRequestFault" use="literal"/>
+			</wsdl:fault>
+			<wsdl:fault name="UnsupportedPolicyRequestFault">
+				<soap:fault name="UnsupportedPolicyRequestFault" use="literal"/>
+			</wsdl:fault>
+			<wsdl:fault name="NotifyMessageNotSupportedFault">
+				<soap:fault name="NotifyMessageNotSupportedFault" use="literal"/>
+			</wsdl:fault>
+			<wsdl:fault name="SubscribeCreationFailedFault">
+				<soap:fault name="SubscribeCreationFailedFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+</wsdl:definitions>

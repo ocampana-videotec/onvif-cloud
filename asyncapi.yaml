@@ -62,9 +62,25 @@ channels:
             UplinkConfiguration:
               type: string
               description: Configuration of the uplink service.
+  DeviceSharingCompleted:
+    address: 'device/sharing/completed'
+    messages:
+      deviceSharingCompletedMessage:
+        name: DeviceSharingCompleted
+        payload:
+          type: object
+          properties:
+            shareToken:
+              type: string
+              description: The share token, used to identidy the device.
 operations:
   onStartDeviceSharing:
     action: 'receive'
     summary: This operation triggers sharing a device to a new Operational Cloud Service.
     channel:
       $ref: '#/channels/startDeviceSharing'
+  onDeviceSharingCompleted:
+    action: 'receive'
+    summary: This operation notifies the new Operational Cloud Service that the device was successfully configured.
+    channel:
+      $ref: '#/channels/deviceSharingCompleted'
