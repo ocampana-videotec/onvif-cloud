@@ -52,12 +52,12 @@ IN NO EVENT WILL THE CORPORATION OR ITS MEMBERS OR THEIR AFFILIATES BE LIABLE FO
 			<xs:element name="StartDeviceSharing">
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="Token" type="xs:string" minOccurs="0">
+						<xs:element name="ShareToken" type="xs:string" minOccurs="0">
 							<xs:annotation>
 								<xs:documentation>The share token, to prove permission to share the device.</xs:documentation>
 							</xs:annotation>
 						</xs:element>
-						<xs:element name="JWTCertificate" type="wsnt:AbsoluteOrRelativeTimeType" minOccurs="0">
+						<xs:element name="JWTCertificate" type="tas:Base64DERencodedASN1Value" minOccurs="0">
 							<xs:annotation>
 								<xs:documentation>The certificate holding the public ECC key used to validate JWTs.</xs:documentation>
 							</xs:annotation>
@@ -80,6 +80,11 @@ IN NO EVENT WILL THE CORPORATION OR ITS MEMBERS OR THEIR AFFILIATES BE LIABLE FO
 						<xs:element name="UplinkConfiguration" type="tup:Configuration" minOccurs="0">
 							<xs:annotation>
 								<xs:documentation>Configuration of the uplink service.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="EndpointReference" type="wsa:EndpointReferenceType" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>The endpoint to be notified to inform that the operation was completed.</xs:documentation>
 							</xs:annotation>
 						</xs:element>
 						<xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
