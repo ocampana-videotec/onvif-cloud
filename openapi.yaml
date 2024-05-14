@@ -132,7 +132,7 @@ paths:
 
   /deviceSharingCompleted:
     post:
-      description: This operation notified the Operational Cloud that the camera was successfully configured. 
+      description: This operation notifies the new Operational Cloud Service that the camera was successfully configured.
       requestBody:
         required: true
         content:
